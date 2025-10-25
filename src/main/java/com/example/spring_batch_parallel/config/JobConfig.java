@@ -39,23 +39,23 @@ public class JobConfig {
     private final LuceneItemWriter luceneItemWriter;
     private final LuceneJobListener luceneJobListener;
 
-    @Bean
-    public Job indexingJob(JobRepository jobRepository, Step indexingStep){
-        return new JobBuilder("indexingJob", jobRepository)
-                .start(indexingStep)
-                .listener(luceneJobListener)
-                .build();
-    }
+@Bean
+public Job indexingJob(JobRepository jobRepository, Step indexingStep){
+    return new JobBuilder("indexingJob", jobRepository)
+            .start(indexingStep)
+            .listener(luceneJobListener)
+            .build();
+}
 
-    @Bean
-    public Step indexingStep(JobRepository jobRepository, PlatformTransactionManager transactionManager){
-        return new StepBuilder("indexingStep", jobRepository)
-                .<Book, Future<Document>>chunk(chunkSize, transactionManager)
-                .reader(itemReader())
-                .processor(itemProcessor())
-                .writer(itemWriter())
-                .build();
-    }
+@Bean
+public Step indexingStep(JobRepository jobRepository, PlatformTransactionManager transactionManager){
+    return new StepBuilder("indexingStep", jobRepository)
+            .<Book, Future<Document>>chunk(chunkSize, transactionManager)
+            .reader(itemReader())
+            .processor(itemProcessor())
+            .writer(itemWriter())
+            .build();
+}
 
     @Bean
     public ItemReader<Book> itemReader() {
